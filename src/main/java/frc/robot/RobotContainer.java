@@ -6,11 +6,20 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.OperatorInterface;
+import frc.robot.subsystems.SwerveDrive;
 
 public class RobotContainer {
+  public SwerveDrive swerveDrive;
+  public OperatorInterface oi;
+  public final DriveCommand driveCommand;
   public RobotContainer() {
     configureBindings();
-  }
+    swerveDrive = new SwerveDrive();
+    oi = new OperatorInterface();
+    driveCommand = new DriveCommand(oi, swerveDrive);
+  } 
 
   private void configureBindings() {}
 
