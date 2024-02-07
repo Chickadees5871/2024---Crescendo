@@ -29,8 +29,8 @@ public class Hardware {
         }
 
         private ArmHardware() {
-            leader = new CANSparkMax(0, MotorType.kBrushless); // need to be filled
-            follower = new CANSparkMax(1, MotorType.kBrushless); // need to be filled
+            leader = new CANSparkMax(50, MotorType.kBrushless); // need to be filled
+            follower = new CANSparkMax(51, MotorType.kBrushless); // need to be filled
             follower.follow(leader);
             encoder = leader.getEncoder();
             encoder.setPositionConversionFactor(360); //must be filled empirically
@@ -55,7 +55,7 @@ public class Hardware {
         private CANSparkMax shooterMotor;
         private static ShooterHardware instance;
         private ShooterHardware(){
-            shooterMotor = new CANSparkMax (0,MotorType.kBrushed);
+            shooterMotor = new CANSparkMax (61,MotorType.kBrushed);
         }
 
         public static ShooterHardware getInstance(){
@@ -74,7 +74,7 @@ public class Hardware {
         private CANSparkMax intakeMotor;
         private static IntakeHardware instance;
         private IntakeHardware(){
-            intakeMotor = new CANSparkMax (0,MotorType.kBrushed);
+            intakeMotor = new CANSparkMax (60,MotorType.kBrushed);
         }
 
         public static IntakeHardware getInstance(){
