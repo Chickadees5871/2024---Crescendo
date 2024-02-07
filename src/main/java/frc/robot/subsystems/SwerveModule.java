@@ -31,8 +31,8 @@ public class SwerveModule {
         // azimuthMotor.burnFlash();
         // driveMotor.burnFlash();
         try {
-            azimMotor.setSmartCurrentLimit(40);
-            driveMotor.setSmartCurrentLimit(40);
+            azimMotor.setSmartCurrentLimit(10);
+            driveMotor.setSmartCurrentLimit(10);
             Thread.sleep(2000);
         } catch (Exception e) {
             // TODO: handle exception
