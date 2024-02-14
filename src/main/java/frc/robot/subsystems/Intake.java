@@ -7,7 +7,7 @@ public class Intake extends SubsystemBase {
     private IntakeHardware IntakeHardware;
     private static Intake instance;
 
-    public Intake(){
+    private Intake(){
         IntakeHardware = Hardware.IntakeHardware.getInstance();
     }
     public static Intake getInstance(){

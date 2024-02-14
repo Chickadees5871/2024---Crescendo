@@ -27,9 +27,6 @@ public class SwerveModule {
         azimMotor.getEncoder().setPosition(-cancoder.getPosition().getValue());
         azimMotor.setInverted(false);
         azimController.setP(1);
-
-        // azimuthMotor.burnFlash();
-        // driveMotor.burnFlash();
         try {
             azimMotor.setSmartCurrentLimit(40);
             driveMotor.setSmartCurrentLimit(40);
@@ -44,9 +41,6 @@ public class SwerveModule {
         double theta = state.angle.getRotations();
         azimController.setReference(theta, ControlType.kPosition);
         driveMotor.set(state.speedMetersPerSecond / maxSpeed);
-        // if(Math.random() >.9 && cancoder.getDeviceID() == 0)
-        // System.out.println(azimMotor.getEncoder().getPosition() + "<-- neo
-        // cancoder-->" + cancoder.getPosition().getValue());
     }
 
 }

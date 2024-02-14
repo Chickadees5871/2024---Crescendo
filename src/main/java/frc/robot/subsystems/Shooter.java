@@ -7,7 +7,7 @@ public class Shooter extends SubsystemBase {
     private ShooterHardware shooterHardware;
     private static Shooter instance;
 
-    public Shooter(){
+    private Shooter(){
         shooterHardware = Hardware.ShooterHardware.getInstance();
     }
     public static Shooter getInstance(){

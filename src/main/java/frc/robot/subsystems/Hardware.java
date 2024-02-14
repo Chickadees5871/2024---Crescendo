@@ -43,7 +43,7 @@ public class Hardware {
         private static double calculateFF(double theta) {
             return kF * Math.cos(theta);
         }
-
+        // Takes in target angle, and drives towards target angle;
         public synchronized void execute(double position) {
             var output = pidController.calculate(encoder.getPosition(), position);
             output += calculateFF(position);
