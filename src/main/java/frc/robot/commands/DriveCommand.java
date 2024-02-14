@@ -10,6 +10,7 @@ public class DriveCommand extends Command {
     public DriveCommand(OperatorInterface oi, SwerveDrive drive){
         this.oi = oi;
         this.swerveDrive = drive;
+        addRequirements(swerveDrive);
     }
 
     @Override
