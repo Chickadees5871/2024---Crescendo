@@ -2,13 +2,10 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class Hardware {
     // define subsystem hardware here. Swerve is self contained so it is ignored
@@ -17,7 +14,6 @@ public class Hardware {
         private CANSparkMax follower;
         private ProfiledPIDController pidController;
         private RelativeEncoder encoder;
-        // private SparkPIDController leadController;
         private static final double kF = .1;
         private static ArmHardware instance;
         
@@ -29,20 +25,20 @@ public class Hardware {
         }
 
         private ArmHardware() {
-            leader = new CANSparkMax(50, MotorType.kBrushless); // need to be filled
-            follower = new CANSparkMax(51, MotorType.kBrushless); // need to be filled
+            leader = new CANSparkMax(9, MotorType.kBrushless); // need to be filled
+            follower = new CANSparkMax(10, MotorType.kBrushless); // need to be filled
             follower.follow(leader);
             encoder = leader.getEncoder();
             encoder.setPositionConversionFactor(360); //must be filled empirically
             // needs to be tuned empirically
             pidController = new ProfiledPIDController(.1, 0, 0,
                     new Constraints(1, 1));
-
         }
 
         private static double calculateFF(double theta) {
             return kF * Math.cos(theta);
         }
+
         // Takes in target angle, and drives towards target angle;
         public synchronized void execute(double position) {
             var output = pidController.calculate(encoder.getPosition(), position);
@@ -55,7 +51,7 @@ public class Hardware {
         private CANSparkMax shooterMotor;
         private static ShooterHardware instance;
         private ShooterHardware(){
-            shooterMotor = new CANSparkMax (61,MotorType.kBrushed);
+            shooterMotor = new CANSparkMax (12,MotorType.kBrushed);
         }
 
         public static ShooterHardware getInstance(){
@@ -74,7 +70,7 @@ public class Hardware {
         private CANSparkMax intakeMotor;
         private static IntakeHardware instance;
         private IntakeHardware(){
-            intakeMotor = new CANSparkMax (60,MotorType.kBrushed);
+            intakeMotor = new CANSparkMax (11,MotorType.kBrushed);
         }
 
         public static IntakeHardware getInstance(){
