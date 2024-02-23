@@ -2,14 +2,16 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+<<<<<<< HEAD
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+=======
+>>>>>>> 268f33bce2bf9236dbcedde9487ba50da6370430
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class Hardware {
     // define subsystem hardware here. Swerve is self contained so it is ignored
@@ -18,7 +20,6 @@ public class Hardware {
         private CANSparkMax follower;
         private ProfiledPIDController pidController;
         private RelativeEncoder encoder;
-        // private SparkPIDController leadController;
         private static final double kF = .1;
         private static ArmHardware instance;
 
@@ -30,10 +31,16 @@ public class Hardware {
         }
 
         private ArmHardware() {
+<<<<<<< HEAD
             leader = new CANSparkMax(10, MotorType.kBrushless); // need to be filled
             follower = new CANSparkMax(9, MotorType.kBrushless); // need to be filled
             follower.setInverted(true);
             // follower.follow(leader);
+=======
+            leader = new CANSparkMax(9, MotorType.kBrushless); // need to be filled
+            follower = new CANSparkMax(10, MotorType.kBrushless); // need to be filled
+            follower.follow(leader);
+>>>>>>> 268f33bce2bf9236dbcedde9487ba50da6370430
             encoder = leader.getEncoder();
             encoder.setPositionConversionFactor(77.4 / 88. * 360); // must be filled empirically
             encoder.setPosition(90);
@@ -42,7 +49,6 @@ public class Hardware {
             // needs to be tuned empirically
             pidController = new ProfiledPIDController(.1, 0, 0,
                     new Constraints(1, 1));
-
         }
 
         private static double calculateFF(double theta) {
@@ -69,10 +75,15 @@ public class Hardware {
     public static class ShooterHardware {
         private CANSparkMax shooterMotor;
         private static ShooterHardware instance;
+<<<<<<< HEAD
 
         private ShooterHardware() {
             shooterMotor = new CANSparkMax(11, MotorType.kBrushed);
             shooterMotor.setIdleMode(IdleMode.kCoast);
+=======
+        private ShooterHardware(){
+            shooterMotor = new CANSparkMax (12,MotorType.kBrushed);
+>>>>>>> 268f33bce2bf9236dbcedde9487ba50da6370430
         }
 
         public static ShooterHardware getInstance() {
@@ -90,9 +101,14 @@ public class Hardware {
     public static class IntakeHardware {
         private CANSparkMax intakeMotor;
         private static IntakeHardware instance;
+<<<<<<< HEAD
 
         private IntakeHardware() {
             intakeMotor = new CANSparkMax(12, MotorType.kBrushed);
+=======
+        private IntakeHardware(){
+            intakeMotor = new CANSparkMax (11,MotorType.kBrushed);
+>>>>>>> 268f33bce2bf9236dbcedde9487ba50da6370430
         }
 
         public static IntakeHardware getInstance() {
