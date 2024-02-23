@@ -6,7 +6,7 @@ import frc.robot.subsystems.Hardware.ArmHardware;
 public class Arm extends SubsystemBase{
     private ArmHardware hardware;
     private final double ANGLE_MAX = 180;
-    private final double ANGLE_MIN = 90;
+    private final double ANGLE_MIN = 0;
     private static Arm instance;
     
     private Arm(){
@@ -37,9 +37,9 @@ public class Arm extends SubsystemBase{
     }
 
     public void accept(double angle){
-        if(angle > ANGLE_MAX || angle < ANGLE_MIN){
-            return;
-        }
+        // if(angle > ANGLE_MAX || angle < ANGLE_MIN){
+        //     return;
+        // }
         hardware.execute(angle);
     }
 

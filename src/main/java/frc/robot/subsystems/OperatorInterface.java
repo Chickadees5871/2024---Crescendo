@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class OperatorInterface extends SubsystemBase {
-    private XboxController driveController;
-    private XboxController gunnerController;
+    public XboxController driveController;
+    public XboxController gunnerController;
 
     public OperatorInterface() {
         driveController = new XboxController(0);

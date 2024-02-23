@@ -4,8 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ArmGoToCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
@@ -20,17 +26,26 @@ public class RobotContainer {
   public final Arm arm;
   public final Shooter shooter;
   public final Intake intake;
+
   public RobotContainer() {
-    configureBindings();
+    
     swerveDrive = new SwerveDrive();
     oi = new OperatorInterface();
     driveCommand = new DriveCommand(oi, swerveDrive);
     arm = Arm.getInstance();
     shooter = Shooter.getInstance();
     intake = Intake.getInstance();
-  } 
+    configureBindings();
+  }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    Trigger Button_Y = new JoystickButton(oi.driveController, XboxController.Button.kY.value);
+    Trigger Button_A = new JoystickButton(oi.driveController, XboxController.Button.kA.value);
+
+    Button_A.onTrue(new InstantCommand(()->{shooter.accept(10);}, shooter));
+    Button_Y.onTrue(new ArmGoToCommand(arm, 90));
+
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
