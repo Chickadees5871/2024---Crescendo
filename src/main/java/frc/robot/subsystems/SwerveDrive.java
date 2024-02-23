@@ -20,7 +20,6 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDrive() {
         modules = new SwerveModule[4];
         modules[0] = new SwerveModule(
-<<<<<<< HEAD
                 new CANSparkMax(2, MotorType.kBrushless),
                 new CANSparkMax(1, MotorType.kBrushless), new CANcoder(50));
         modules[1] = new SwerveModule(
@@ -32,19 +31,6 @@ public class SwerveDrive extends SubsystemBase {
         modules[3] = new SwerveModule(
                 new CANSparkMax(8, MotorType.kBrushless),
                 new CANSparkMax(7, MotorType.kBrushless), new CANcoder(53));
-=======
-                new CANSparkMax(1, MotorType.kBrushless),
-                new CANSparkMax(5, MotorType.kBrushless), new CANcoder(50));
-        modules[1] = new SwerveModule(
-                new CANSparkMax(2, MotorType.kBrushless),
-                new CANSparkMax(6, MotorType.kBrushless), new CANcoder(51));
-        modules[2] = new SwerveModule(
-                new CANSparkMax(3, MotorType.kBrushless),
-                new CANSparkMax(7, MotorType.kBrushless), new CANcoder(52));
-        modules[3] = new SwerveModule(
-                new CANSparkMax(4, MotorType.kBrushless),
-                new CANSparkMax(8, MotorType.kBrushless), new CANcoder(53));
->>>>>>> 268f33bce2bf9236dbcedde9487ba50da6370430
         kinematics = new SwerveDriveKinematics(
                 new Translation2d(15 * 2.54 / 100, -15 * 2.54 / 100),
                 new Translation2d(15 * 2.54 / 100, 15 * 2.54 / 100),
