@@ -22,9 +22,15 @@ public class SwerveModule {
         azimController = azimMotor.getPIDController();
         driveController = driveMotor.getPIDController();
         this.cancoder = cancoder;
+    
+        // cancoder.setPosition(cancoder.getPosition().getValue() + .25);
+        // try {
+        //     Thread.sleep(500);
+        // } catch (Exception e) {
+        // }
 
         azimMotor.getEncoder().setPositionConversionFactor(1.0 / 13.3714);
-        azimMotor.getEncoder().setPosition(-cancoder.getPosition().getValue());
+        azimMotor.getEncoder().setPosition(-cancoder.getPosition().getValue() + .25);
         azimMotor.setInverted(false);
         azimController.setP(1);
         try {
@@ -39,6 +45,8 @@ public class SwerveModule {
     public void acceptMotion(SwerveModuleState state) {
         double theta = state.angle.getRotations();
         azimController.setReference(theta, ControlType.kPosition);
+        // if(Math.random() > .9)
+        // System.out.println(azimMotor.getEncoder().getPosition() + " " + azimMotor.getDeviceId());
         driveMotor.set(state.speedMetersPerSecond / maxSpeed);
     }
 
