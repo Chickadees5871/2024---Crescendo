@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase {
         return instance;
     }
 
-    public void accept(double voltage){
-        IntakeHardware.execute(voltage);
+    public void accept(double dutyCycle){
+        IntakeHardware.execute(dutyCycle);
     }
 }

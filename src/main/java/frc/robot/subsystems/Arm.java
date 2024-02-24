@@ -8,6 +8,7 @@ public class Arm extends SubsystemBase{
     private final double ANGLE_MAX = 180;
     private final double ANGLE_MIN = 0;
     private static Arm instance;
+    private double angle;
     
     private Arm(){
         hardware = Hardware.ArmHardware.getInstance();
@@ -40,7 +41,15 @@ public class Arm extends SubsystemBase{
         // if(angle > ANGLE_MAX || angle < ANGLE_MIN){
         //     return;
         // }
+        this.angle = angle;
+    }
+
+    @Override
+    public void periodic() {
         hardware.execute(angle);
+        // if(Math.random() > .9){
+        //     System.out.println(angle);
+        // }
     }
 
     

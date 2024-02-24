@@ -17,7 +17,8 @@ public class Shooter extends SubsystemBase {
         return instance;
     }
 
-    public void accept(double voltage){
-        shooterHardware.execute(voltage);
+    public void accept(double dutyCycle){
+        shooterHardware.execute(dutyCycle);
+        System.out.println("Hello There");
     }
 }
