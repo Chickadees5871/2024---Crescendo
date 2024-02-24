@@ -30,8 +30,6 @@ public class Arm extends SubsystemBase{
         }
     }
 
-    
-
     public void accept(ArmStates armStates){
         accept(armStates.angle);
     }
