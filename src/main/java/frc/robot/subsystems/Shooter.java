@@ -19,6 +19,5 @@ public class Shooter extends SubsystemBase {
 
     public void accept(double dutyCycle){
         shooterHardware.execute(dutyCycle);
-        System.out.println("Hello There");
     }
 }
