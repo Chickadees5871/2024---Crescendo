@@ -18,6 +18,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.OperatorInterface;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Hardware.ShooterHardware;
 
 public class RobotContainer {
   public SwerveDrive swerveDrive;
@@ -36,6 +37,7 @@ public class RobotContainer {
     shooter = Shooter.getInstance();
     intake = Intake.getInstance();
     configureBindings();
+    System.out.println(ShooterHardware.getInstance());
   }
 
   private void configureBindings() {
@@ -43,12 +45,20 @@ public class RobotContainer {
     Trigger Button_A = new JoystickButton(oi.driveController, XboxController.Button.kA.value);
     Trigger Button_X = new JoystickButton(oi.driveController, XboxController.Button.kX.value);
     Trigger Button_B = new JoystickButton(oi.driveController, XboxController.Button.kB.value);
+    Trigger Left_Bumper = new JoystickButton(oi.driveController, XboxController.Button.kLeftBumper.value);
+
 
     Button_A.onTrue(new InstantCommand(() -> {
       shooter.accept(1);
     }, shooter));
+
+    Left_Bumper.onTrue(new InstantCommand(() -> {
+      shooter.accept(-1);
+    }, shooter));
+
+
     Button_B.onTrue(new InstantCommand(() -> {
-      intake.accept(.2);
+      intake.accept(-.2);
     }, intake));
     Button_Y.onTrue(new ArmGoToCommand(arm, 90));
     Button_X.onTrue(new ArmGoToCommand(arm, 20));

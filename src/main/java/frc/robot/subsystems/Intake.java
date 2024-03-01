@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Hardware.IntakeHardware;
 
 public class Intake extends SubsystemBase {
-    private IntakeHardware IntakeHardware;
+    private IntakeHardware intakeHardware;
     private static Intake instance;
 
     private Intake(){
-        IntakeHardware = Hardware.IntakeHardware.getInstance();
+        intakeHardware = Hardware.IntakeHardware.getInstance();
     }
     public static Intake getInstance(){
         if(instance == null){
@@ -18,6 +18,6 @@ public class Intake extends SubsystemBase {
     }
 
     public void accept(double dutyCycle){
-        IntakeHardware.execute(dutyCycle);
+        intakeHardware.execute(dutyCycle);
     }
 }
