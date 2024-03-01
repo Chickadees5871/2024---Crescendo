@@ -28,7 +28,7 @@ public class RobotContainer {
   public final Intake intake;
 
   public RobotContainer() {
-    
+
     swerveDrive = new SwerveDrive();
     oi = new OperatorInterface();
     driveCommand = new DriveCommand(oi, swerveDrive);
@@ -41,9 +41,17 @@ public class RobotContainer {
   private void configureBindings() {
     Trigger Button_Y = new JoystickButton(oi.driveController, XboxController.Button.kY.value);
     Trigger Button_A = new JoystickButton(oi.driveController, XboxController.Button.kA.value);
+    Trigger Button_X = new JoystickButton(oi.driveController, XboxController.Button.kX.value);
+    Trigger Button_B = new JoystickButton(oi.driveController, XboxController.Button.kB.value);
 
-    Button_A.onTrue(new InstantCommand(()->{shooter.accept(10);}, shooter));
+    Button_A.onTrue(new InstantCommand(() -> {
+      shooter.accept(1);
+    }, shooter));
+    Button_B.onTrue(new InstantCommand(() -> {
+      intake.accept(.2);
+    }, intake));
     Button_Y.onTrue(new ArmGoToCommand(arm, 90));
+    Button_X.onTrue(new ArmGoToCommand(arm, 20));
 
   }
 

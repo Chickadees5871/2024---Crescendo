@@ -18,4 +18,9 @@ public class ArmGoToCommand extends Command {
         arm.accept(setpoint);
         System.out.println("Hi I POTATO");
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }
