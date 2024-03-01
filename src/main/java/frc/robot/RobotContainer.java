@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArmGoToCommand;
@@ -46,20 +49,45 @@ public class RobotContainer {
     Trigger Button_X = new JoystickButton(oi.driveController, XboxController.Button.kX.value);
     Trigger Button_B = new JoystickButton(oi.driveController, XboxController.Button.kB.value);
     Trigger Left_Bumper = new JoystickButton(oi.driveController, XboxController.Button.kLeftBumper.value);
+    Trigger Right_Bumper = new JoystickButton(oi.driveController, XboxController.Button.kRightBumper.value);
+
+   
+    Left_Bumper.onTrue(new ParallelCommandGroup(new InstantCommand(() -> {
+      shooter.accept(0);
+      intake.accept(-5);
+    }, shooter, intake), new ArmGoToCommand(arm, 3)));
+
+    Left_Bumper.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
+      shooter.accept(0);
+      intake.accept(0);
+    }, shooter, intake), new ArmGoToCommand(arm, 3)));
 
 
-    Button_A.onTrue(new InstantCommand(() -> {
-      shooter.accept(1);
-    }, shooter));
 
-    Left_Bumper.onTrue(new InstantCommand(() -> {
-      shooter.accept(-1);
-    }, shooter));
+    Right_Bumper.onTrue(new SequentialCommandGroup(
+      new InstantCommand(() -> {
+          shooter.accept(0);
+          intake.accept(2);
+        }, shooter, intake),
+        new WaitCommand(.05),
+      new InstantCommand(() -> {
+          shooter.accept(-12);
+                    intake.accept(0);
+        }, shooter,intake),
+        new ArmGoToCommand(arm, 28),
+        new WaitCommand(2),
+        new InstantCommand(() -> {
+          intake.accept(-12);
+        }, intake)));
 
 
-    Button_B.onTrue(new InstantCommand(() -> {
-      intake.accept(-.2);
-    }, intake));
+
+
+    Right_Bumper.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
+      shooter.accept(0);
+      intake.accept(0);
+    }, shooter, intake), new ArmGoToCommand(arm, 3)));
+
     Button_Y.onTrue(new ArmGoToCommand(arm, 90));
     Button_X.onTrue(new ArmGoToCommand(arm, 20));
 

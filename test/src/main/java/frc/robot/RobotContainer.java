@@ -22,6 +22,8 @@ public class RobotContainer {
   public RobotContainer() {
     shooterMotor = new CANSparkMax(11, MotorType.kBrushed);
     intakeMotor = new CANSparkMax(12, MotorType.kBrushed);
+    shooterMotor.restoreFactoryDefaults();
+    intakeMotor.restoreFactoryDefaults();
     driver = new XboxController(0);
     configureBindings();
   }
@@ -31,6 +33,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> shooterMotor.setVoltage(12)));
     (new JoystickButton(driver, XboxController.Button.kA.value))
         .onTrue(new InstantCommand(() -> intakeMotor.setVoltage(12)));
+      
   }
 
   public Command getAutonomousCommand() {

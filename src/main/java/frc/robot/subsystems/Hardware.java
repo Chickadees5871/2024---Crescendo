@@ -61,6 +61,10 @@ public class Hardware {
             return kF * Math.cos(theta);
         }
 
+        public RelativeEncoder getEncoder(){
+            return encoder;
+        }
+
         // Takes in target angle, and drives towards target angle;
         public void execute(double position) {
             var output = pidController.calculate(encoder.getPosition(), position);
@@ -103,8 +107,8 @@ public class Hardware {
             return instance;
         }
 
-        public void execute(double dutyCycle) {
-            shooterMotor.set(dutyCycle);
+        public void execute(double voltage) {
+            shooterMotor.set(voltage);
         }
     }
 
@@ -123,8 +127,8 @@ public class Hardware {
             return instance;
         }
 
-        public void execute(double dutyCycle) {
-            intakeMotor.set(dutyCycle);
+        public void execute(double voltage) {
+            intakeMotor.set(voltage);
         }
     }
 }

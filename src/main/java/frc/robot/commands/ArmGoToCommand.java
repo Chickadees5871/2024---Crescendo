@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Hardware;
 
 public class ArmGoToCommand extends Command {
     private Arm arm;
@@ -21,6 +22,6 @@ public class ArmGoToCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return Math.abs(setpoint - Hardware.ArmHardware.getInstance().getEncoder().getPosition()) < 2;
     }
 }
