@@ -7,17 +7,16 @@ import frc.robot.subsystems.Hardware;
 public class ArmGoToCommand extends Command {
     private Arm arm;
     private double setpoint;
-    public ArmGoToCommand(Arm arm, double value){
+    public ArmGoToCommand(Arm arm, double angle){
         this.arm = arm;
         addRequirements(arm);
-        this.setpoint = value;
+        this.setpoint = angle;
     
     }
 
     @Override
     public void initialize() {
         arm.accept(setpoint);
-        System.out.println("Hi I POTATO");
     }
 
     @Override

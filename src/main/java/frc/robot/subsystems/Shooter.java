@@ -17,7 +17,7 @@ public class Shooter extends SubsystemBase {
         return instance;
     }
 
-    public void accept(double dutyCycle){
+    public void accept(double dutyCycle){ //the velocity value
         shooterHardware.execute(dutyCycle);
     }
 }

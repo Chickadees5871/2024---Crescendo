@@ -44,27 +44,27 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    Trigger Button_Y = new JoystickButton(oi.driveController, XboxController.Button.kY.value);
+    Trigger armLift = new JoystickButton(oi.driveController, XboxController.Button.kY.value);
     Trigger Button_A = new JoystickButton(oi.driveController, XboxController.Button.kA.value);
-    Trigger Button_X = new JoystickButton(oi.driveController, XboxController.Button.kX.value);
+    Trigger armDown = new JoystickButton(oi.driveController, XboxController.Button.kX.value);
     Trigger Button_B = new JoystickButton(oi.driveController, XboxController.Button.kB.value);
-    Trigger Left_Bumper = new JoystickButton(oi.driveController, XboxController.Button.kLeftBumper.value);
-    Trigger Right_Bumper = new JoystickButton(oi.driveController, XboxController.Button.kRightBumper.value);
+    Trigger stopShooter = new JoystickButton(oi.driveController, XboxController.Button.kLeftBumper.value);
+    Trigger stopIntake = new JoystickButton(oi.driveController, XboxController.Button.kRightBumper.value);
 
    
-    Left_Bumper.onTrue(new ParallelCommandGroup(new InstantCommand(() -> {
+    stopShooter.onTrue(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(-5);
     }, shooter, intake), new ArmGoToCommand(arm, 3)));
 
-    Left_Bumper.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
+    stopShooter.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
     }, shooter, intake), new ArmGoToCommand(arm, 3)));
 
 
 
-    Right_Bumper.onTrue(new SequentialCommandGroup(
+    stopIntake.onTrue(new SequentialCommandGroup(
       new InstantCommand(() -> {
           shooter.accept(0);
           intake.accept(2);
@@ -83,13 +83,13 @@ public class RobotContainer {
 
 
 
-    Right_Bumper.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
+    stopIntake.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
     }, shooter, intake), new ArmGoToCommand(arm, 3)));
 
-    Button_Y.onTrue(new ArmGoToCommand(arm, 90));
-    Button_X.onTrue(new ArmGoToCommand(arm, 20));
+    armLift.onTrue(new ArmGoToCommand(arm, 90));
+    armDown.onTrue(new ArmGoToCommand(arm, 20));
 
   }
 
