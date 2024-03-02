@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -13,6 +14,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer robotContainer;
+
+  private DigitalInput toplimitSwitch;
 
   @Override
   public void robotInit() {
@@ -55,10 +58,14 @@ public class Robot extends TimedRobot {
     }
     robotContainer.driveCommand.schedule();
 
+    toplimitSwitch = new DigitalInput(0);
+
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    System.out.println("Limit Switch: " + toplimitSwitch.get());
+  }
 
   @Override
   public void teleopExit() {}
