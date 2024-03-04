@@ -65,6 +65,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     System.out.println("Limit Switch: " + toplimitSwitch.get());
+    //If limit switch is triggered, intake motor stops
+    if(toplimitSwitch.get() == true && robotContainer.shootSpeaker.onFalse()) {
+      robotContainer.intake.accept(0);
+    }
   }
 
   @Override
