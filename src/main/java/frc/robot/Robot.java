@@ -4,18 +4,18 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.commands.ArmGoToCommand;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer robotContainer;
 
-  private DigitalInput toplimitSwitch;
+  private DigitalInput limitSwitch;
 
   @Override
   public void robotInit() {
@@ -58,15 +58,14 @@ public class Robot extends TimedRobot {
     }
     robotContainer.driveCommand.schedule();
 
-    toplimitSwitch = new DigitalInput(0);
+    new ArmGoToCommand(robotContainer.arm, 2);
 
+    limitSwitch = new DigitalInput(0);
   }
 
   @Override
-  public void teleopPeriodic() {
-    System.out.println("Limit Switch: " + toplimitSwitch.get());
-    //If limit switch is triggered, intake motor stops
-    if(toplimitSwitch.get() == true && robotContainer.shootSpeaker.onFalse()) {
+  public void teleopPeriodic() {   
+    if(limitSwitch.get() == true && robotContainer.shooter.getActive() == false) {
       robotContainer.intake.accept(0);
     }
   }
