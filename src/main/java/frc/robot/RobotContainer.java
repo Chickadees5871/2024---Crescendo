@@ -44,45 +44,62 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    Trigger shootAmp = new JoystickButton(oi.gunnerController, XboxController.Button.kB.value);
-    //Trigger Button_A = new JoystickButton(oi.driveController, XboxController.Button.kA.value);
-    Trigger speakerPos = new JoystickButton(oi.gunnerController, XboxController.Button.kX.value);
-    Trigger ampPos = new JoystickButton(oi.gunnerController, XboxController.Button.kY.value);
-    Trigger intake = new JoystickButton(oi.gunnerController, XboxController.Button.kLeftBumper.value);
-    Trigger shootSpeaker = new JoystickButton(oi.gunnerController, XboxController.Button.kA.value);
+    Trigger shootAmp = new JoystickButton(oi.gunnerController, 6);
+   // Trigger Button_A = new JoystickButton(oi.driveController, XboxController.Button.kA.value);
+    Trigger shootSpeaker = new JoystickButton(oi.gunnerController, 5);
+    Trigger speakerPos = new JoystickButton(oi.driveController, XboxController.Button.kX.value);
+    Trigger ampPos = new JoystickButton(oi.driveController, XboxController.Button.kY.value);
+    Trigger intake2 = new JoystickButton(oi.gunnerController, 1);
 
-  
-    intake.onTrue(new ParallelCommandGroup(new InstantCommand(() -> {
+   
+    intake2.onTrue(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
-      intake.accept(-.8);
+      intake.accept(-5);
     }, shooter, intake), new ArmGoToCommand(arm, 2)));
 
-    intake.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
+    intake2.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
     }, shooter, intake), new ArmGoToCommand(arm, 2)));
 
 
-    //Since we are using a limit switch, running the intake backwards is not necessary.
-    //Spins up the shooter at 28 degrees then runs the intake to push note into shooter
+
     shootSpeaker.onTrue(new SequentialCommandGroup(
-      new InstantCommand(() -> {
-          //shooter.accept(0);
-          //intake.accept(2);
-        }, shooter, intake),
-        //new WaitCommand(.05),
+      //new InstantCommand(() -> {
+      //    shooter.accept(0);
+      //    intake.accept(2);
+      //  }, shooter, intake),
+      //  new WaitCommand(.05),
       new InstantCommand(() -> {
           shooter.accept(-12);
-                    intake.accept(0);
+          System.out.println("Shooter here");
+          intake.accept(0);
         }, shooter,intake),
-        new ArmGoToCommand(arm, 28),
+        new ArmGoToCommand(arm, 10),
         new WaitCommand(2),
         new InstantCommand(() -> {
           intake.accept(-12);
         }, intake)));
 
 
+    shootAmp.onTrue(new SequentialCommandGroup(
+      new InstantCommand(() -> {
+        shooter.accept(-12);
+        intake.accept(0);
+      }, shooter, intake),
+      new ArmGoToCommand(arm, 90),
+      new WaitCommand(.5),
+      new InstantCommand(() -> {
+        intake.accept(-12);
+      }, intake)
+    ));
+
     shootSpeaker.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
+      shooter.accept(0);
+      intake.accept(0);
+    }, shooter, intake), new ArmGoToCommand(arm, 2)));
+
+    shootAmp.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
     }, shooter, intake), new ArmGoToCommand(arm, 2)));
@@ -90,22 +107,9 @@ public class RobotContainer {
     ampPos.onTrue(new ArmGoToCommand(arm, 90));
     speakerPos.onTrue(new ArmGoToCommand(arm, 20));
 
-  //Spins up shooter at 90 degrees then runs the intake to push note into shooter
-  shootAmp.onTrue(new SequentialCommandGroup(
-    new InstantCommand(() -> {
-      shooter.accept(-12);
-      intake.accept(0);
-    }, shooter, intake),
-    new ArmGoToCommand(arm, 90),
-    new WaitCommand(1),
-    new InstantCommand(() -> {
-      intake.accept(-12);
-    }, intake)
-  ));
   }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
 }
-
