@@ -16,9 +16,9 @@ public class OperatorInterface extends SubsystemBase {
     public ChassisSpeeds getChassisSpeeds() {
 
         return new ChassisSpeeds(
-                deadzone(driveController.getLeftX(), .2),
-                deadzone(driveController.getLeftY(), .2),
-                deadzone(driveController.getRightX(), .2));
+                Math.pow(deadzone(driveController.getLeftX(), .2),3),
+                Math.pow(deadzone(driveController.getLeftY(), .2),3),
+                -Math.pow(deadzone(driveController.getRightX(), .2),3));
     }
 
     public static double deadzone(double val, double threshold) {

@@ -6,6 +6,7 @@ import frc.robot.subsystems.Hardware.ShooterHardware;
 public class Shooter extends SubsystemBase {
     private ShooterHardware shooterHardware;
     private static Shooter instance;
+    private boolean active;
 
     private Shooter(){
         shooterHardware = Hardware.ShooterHardware.getInstance();
@@ -19,5 +20,12 @@ public class Shooter extends SubsystemBase {
 
     public void accept(double dutyCycle){
         shooterHardware.execute(dutyCycle);
+        if(dutyCycle != 0) {
+            active = true;
+        }
+    }
+
+    public boolean getActive() {
+        return active;
     }
 }

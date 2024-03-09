@@ -108,7 +108,7 @@ public class Hardware {
         }
 
         public void execute(double voltage) {
-            shooterMotor.set(voltage);
+            shooterMotor.setVoltage(voltage);
         }
     }
 
@@ -128,7 +128,7 @@ public class Hardware {
         }
 
         public void execute(double voltage) {
-            intakeMotor.set(voltage);
+            intakeMotor.setVoltage(voltage);
         }
     }
 }

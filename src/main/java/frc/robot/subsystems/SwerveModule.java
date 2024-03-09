@@ -64,7 +64,7 @@ public class SwerveModule {
         double driveVoltage = state.speedMetersPerSecond / maxSpeed;
         calculateOptimalSetpoint(theta, driveVoltage, encoder.getPosition());
         setReferenceAngle(swerveCommand.angle);
-        driveMotor.set(swerveCommand.drive);
+        driveMotor.setVoltage(swerveCommand.drive * 60);
         // if(cancoder.getDeviceID() == 52 && Math.random() > .9){
         //     System.out.println("cancoder = " + (cancoder.getPosition().getValueAsDouble()* 2 * Math.PI) + " encoder: " + encoder.getPosition());
         // }

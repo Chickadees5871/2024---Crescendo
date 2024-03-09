@@ -22,6 +22,6 @@ public class ArmGoToCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(setpoint - Hardware.ArmHardware.getInstance().getEncoder().getPosition()) < 2;
+        return Math.abs(setpoint - Hardware.ArmHardware.getInstance().getEncoder().getPosition()) < 1;
     }
 }

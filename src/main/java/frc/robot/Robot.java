@@ -7,11 +7,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.commands.ArmGoToCommand;
+import frc.robot.subsystems.Arm;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer robotContainer;
+
+  private DigitalInput limitSwitch;
 
   @Override
   public void robotInit() {
@@ -46,17 +51,26 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousExit() {}
-
+ 
   @Override
   public void teleopInit() {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
     robotContainer.driveCommand.schedule();
+
+    new ArmGoToCommand(robotContainer.arm, 3).schedule();
+    System.out.println("Here");
+
+    // limitSwitch = new DigitalInput(0);
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {   
+    // if(limitSwitch.get() == true && robotContainer.shooter.getActive() == false) {
+    //   robotContainer.intake.accept(0);
+    // }
+  }
 
   @Override
   public void teleopExit() {}
