@@ -60,7 +60,7 @@ public class RobotContainer {
     intake2.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
-    }, shooter, intake), new ArmGoToCommand(arm, 2)));
+    }, shooter, intake), new ArmGoToCommand(arm, 3)));
 
     shootSpeaker.onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> {
@@ -81,6 +81,11 @@ public class RobotContainer {
         }, intake)));
 
     shootAmp.onTrue(new SequentialCommandGroup(
+      new InstantCommand(() -> {
+          shooter.accept(0);
+          intake.accept(3);
+        }, shooter, intake),
+        new WaitCommand(.05),
         new InstantCommand(() -> {
           shooter.accept(-12);
           intake.accept(0);
@@ -94,7 +99,7 @@ public class RobotContainer {
     shootSpeaker.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
-    }, shooter, intake), new ArmGoToCommand(arm, 2)));
+    }, shooter, intake), new ArmGoToCommand(arm, 3)));
 
     shootAmp.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
@@ -120,6 +125,6 @@ public class RobotContainer {
             new ParallelCommandGroup(new InstantCommand(() -> {
               shooter.accept(0);
               intake.accept(0);
-            }, shooter, intake), new ArmGoToCommand(arm, 2)));
+            }, shooter, intake), new ArmGoToCommand(arm, 3)));
   }
 }
