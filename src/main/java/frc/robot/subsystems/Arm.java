@@ -21,20 +21,6 @@ public class Arm extends SubsystemBase{
         return instance;
     }
 
-
-    // public static enum ArmStates{
-    //     Intake(0),
-    //     Fender(0);
-    //     public final double angle;
-    //      ArmStates(double angle){
-    //             this.angle = angle;
-    //     }
-    // }
-
-    // public void accept(ArmStates armStates){
-    //     accept(armStates.angle);
-    // }
-
     public void accept(double angle){
         this.angle = angle;
     }

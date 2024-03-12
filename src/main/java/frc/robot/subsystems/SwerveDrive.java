@@ -42,8 +42,6 @@ public class SwerveDrive extends SubsystemBase {
                 new Translation2d(-15 * 2.54 / 100, -15 * 2.54 / 100));
         navX = new AHRS(Port.kUSB);
         controller = new PIDController(.01, 0, 0);
-        // navX.setAngleAdjustment(180);
-        // navX.reset();
     }
 
     public void accept(ChassisSpeeds fieldCentricChassisSpeeds) {

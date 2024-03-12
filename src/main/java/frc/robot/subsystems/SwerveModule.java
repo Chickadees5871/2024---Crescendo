@@ -35,11 +35,9 @@ public class SwerveModule {
         azimController = azimMotor.getPIDController();
         driveController = driveMotor.getPIDController();
         this.cancoder = cancoder;
-
-        // azimMotor.getEncoder().setPositionConversionFactor(1.0 / 13.3714);
         azimMotor.getEncoder().setPositionConversionFactor(Math.PI * 2 / 13.3714);
 
-        azimMotor.getEncoder().setPosition(-cancoder.getPosition().getValue() * Math.PI * 2 + Math.PI /2);
+        azimMotor.getEncoder().setPosition(-cancoder.getPosition().getValue() * Math.PI * 2 + Math.PI / 2);
         azimMotor.setInverted(false);
         azimController.setP(1);
         encoder = azimuthMotor.getEncoder();
@@ -54,20 +52,11 @@ public class SwerveModule {
     }
 
     public void acceptMotion(SwerveModuleState state) {
-        // double theta = state.angle.getRotations();
         double theta = state.angle.getRadians();
-
-        // azimController.setReference(theta, ControlType.kPosition);
-        // if(Math.random() > .9)
-        // System.out.println(azimMotor.getEncoder().getPosition() + " " +
-        // azimMotor.getDeviceId());
         double driveVoltage = state.speedMetersPerSecond / maxSpeed;
         calculateOptimalSetpoint(theta, driveVoltage, encoder.getPosition());
         setReferenceAngle(swerveCommand.angle);
         driveMotor.setVoltage(swerveCommand.drive * 60);
-        // if(cancoder.getDeviceID() == 52 && Math.random() > .9){
-        //     System.out.println("cancoder = " + (cancoder.getPosition().getValueAsDouble()* 2 * Math.PI) + " encoder: " + encoder.getPosition());
-        // }
     }
 
     public void setReferenceAngle(double referenceAngleRadians) {
