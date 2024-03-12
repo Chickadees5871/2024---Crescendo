@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase {
         return instance;
     }
 
-    public void accept(double dutyCycle){
+    public void accept(double dutyCycle){ //the velocity value
         intakeHardware.execute(dutyCycle);
     }
 }

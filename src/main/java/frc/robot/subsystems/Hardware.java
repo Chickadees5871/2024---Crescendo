@@ -32,18 +32,14 @@ public class Hardware {
         }
 
         private ArmHardware() {
-            leader = new CANSparkMax(10, MotorType.kBrushless); // need to be filled
-            follower = new CANSparkMax(9, MotorType.kBrushless); // need to be filled
+            leader = new CANSparkMax(10, MotorType.kBrushless); 
+            follower = new CANSparkMax(9, MotorType.kBrushless);
             leader.setInverted(true);
 
             encoder = leader.getEncoder();
             encoder.setPosition(0);
 
          encoder.setPositionConversionFactor(90 / (76.8)); // must be filled empirically
-        //    encoder.setInverted(true);
-        //    System.out.println(temp);
-        //    if(true)
-        //    throw new RuntimeException();
             leader.setIdleMode(IdleMode.kBrake);
             follower.setIdleMode(IdleMode.kBrake);
             // follower.setInverted(true);
@@ -53,8 +49,6 @@ public class Hardware {
                     new Constraints(60, 1000));
 
             standardController = new PIDController(.05, 0, 0);
-            // leadController = leader.getPIDController();
-            // leadController.setP(.1);
         }
 
         private static double calculateFF(double theta) {
@@ -68,26 +62,7 @@ public class Hardware {
         // Takes in target angle, and drives towards target angle;
         public void execute(double position) {
             var output = pidController.calculate(encoder.getPosition(), position);
-            // var output = standardController.calculate(encoder.getPosition(), position);
-            // output += calculateFF(position);
-            // if (Math.abs(output) < .1) {
             leader.set(output);
-            // }
-            // else {
-            // leader.set(Math.signum(output) * .1);
-            // }
-            // if (Math.random() > .9) {
-            //     System.out.println("encoder: " + encoder.getPosition() + " position: " + position);
-            // }
-            // System.out.println(output);
-            // follower.set(.5);
-            // leader.set(.5);
-            // follower.setVoltage(8);
-            // follower.follow(leader);
-
-            // leadController.setReference(leader.getEncoder().getPosition() + 1000,
-            // ControlType.kPosition);
-
         }
     }
 

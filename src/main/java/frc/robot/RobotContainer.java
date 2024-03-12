@@ -46,27 +46,29 @@ public class RobotContainer {
 
   private void configureBindings() {
     Trigger shootAmp = new JoystickButton(oi.gunnerController, 6);
+
     // Trigger Button_A = new JoystickButton(oi.driveController,
     // XboxController.Button.kA.value);
     Trigger shootSpeaker = new JoystickButton(oi.gunnerController, 5);
     Trigger speakerPos = new JoystickButton(oi.gunnerController, 4);
     Trigger ampPos = new JoystickButton(oi.gunnerController, 3);
-    Trigger intake2 = new JoystickButton(oi.driveController,  XboxController.Button.kRightBumper.value);
+    Trigger intake2 = new JoystickButton(oi.driveController, XboxController.Button.kRightBumper.value);
 
     intake2.onTrue(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(-10);
+
     }, shooter, intake), new ArmGoToCommand(arm, 2)));
 
     intake2.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
-    }, shooter, intake), new ArmGoToCommand(arm, 3)));
+    }, shooter, intake), new ArmGoToCommand(arm, 2)));
 
     shootSpeaker.onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> {
-        shooter.accept(0);
-        intake.accept(3);
+          shooter.accept(0);
+          intake.accept(3);
         }, shooter, intake),
         new WaitCommand(.05),
         new InstantCommand(() -> {
@@ -74,6 +76,7 @@ public class RobotContainer {
           System.out.println("Shooter here");
           intake.accept(0);
         }, shooter, intake),
+
         new ArmGoToCommand(arm, 10),
         new WaitCommand(2),
         new InstantCommand(() -> {
@@ -94,7 +97,7 @@ public class RobotContainer {
     shootSpeaker.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
-    }, shooter, intake), new ArmGoToCommand(arm, 3)));
+    }, shooter, intake), new ArmGoToCommand(arm, 2)));
 
     shootAmp.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);

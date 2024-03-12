@@ -22,32 +22,26 @@ public class Arm extends SubsystemBase{
     }
 
 
-    public static enum ArmStates{
-        Intake(0),
-        Fender(0);
-        public final double angle;
-         ArmStates(double angle){
-                this.angle = angle;
-        }
-    }
+    // public static enum ArmStates{
+    //     Intake(0),
+    //     Fender(0);
+    //     public final double angle;
+    //      ArmStates(double angle){
+    //             this.angle = angle;
+    //     }
+    // }
 
-    public void accept(ArmStates armStates){
-        accept(armStates.angle);
-    }
+    // public void accept(ArmStates armStates){
+    //     accept(armStates.angle);
+    // }
 
     public void accept(double angle){
-        // if(angle > ANGLE_MAX || angle < ANGLE_MIN){
-        //     return;
-        // }
         this.angle = angle;
     }
 
     @Override
     public void periodic() {
         hardware.execute(angle);
-        // if(Math.random() > .9){
-        //     System.out.println(angle);
-        // }
     }
 
     
