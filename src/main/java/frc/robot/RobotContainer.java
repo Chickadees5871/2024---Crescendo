@@ -46,9 +46,6 @@ public class RobotContainer {
 
   private void configureBindings() {
     Trigger shootAmp = new JoystickButton(oi.gunnerController, 6);
-
-    // Trigger Button_A = new JoystickButton(oi.driveController,
-    // XboxController.Button.kA.value);
     Trigger shootSpeaker = new JoystickButton(oi.gunnerController, 5);
     Trigger speakerPos = new JoystickButton(oi.gunnerController, 4);
     Trigger ampPos = new JoystickButton(oi.gunnerController, 3);
@@ -111,11 +108,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
-        // new InstantCommand(() -> {
-        // shooter.accept(0);
-        // intake.accept(2);
-        // }, shooter, intake),
-        // new WaitCommand(.05),
         new InstantCommand(() -> {
           shooter.accept(-12);
           intake.accept(0);
