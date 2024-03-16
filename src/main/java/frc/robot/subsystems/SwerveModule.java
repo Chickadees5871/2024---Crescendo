@@ -1,22 +1,36 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModule {
-    private SparkPIDController azimController;
+    //private SparkPIDController azimController;
     private SparkPIDController driveController;
     private CANSparkMax driveMotor;
     private CANSparkMax azimMotor;
     private CANcoder cancoder;
     double maxSpeed = 3;
-    private RelativeEncoder encoder;
+    boolean log = false;
+    //private RelativeEncoder encoder;
     private DirectSwerveCommand swerveCommand;
+    PIDController anglePIDcontroller = new PIDController(0.005, 0.00, 0.00);
+
+    RelativeEncoder drive_Encoder;
+
+    SwerveModuleState currentState;
+
 
     private class DirectSwerveCommand {
         double angle;
@@ -25,25 +39,45 @@ public class SwerveModule {
         public DirectSwerveCommand(double angle, double drive) {
             this.angle = angle;
             this.drive = drive;
+
+            driveMotor.setIdleMode(IdleMode.kCoast);
         }
     }
-
-    public SwerveModule(CANSparkMax driveMotor, CANSparkMax azimuthMotor, CANcoder cancoder) {
+public SwerveModule(CANSparkMax driveMotor, CANSparkMax azimuthMotor, CANcoder cancoder, double offset, boolean log) {
+    this(driveMotor, azimuthMotor, cancoder, offset);
+    this.log = log;
+}
+    public SwerveModule(CANSparkMax driveMotor, CANSparkMax azimuthMotor, CANcoder cancoder, double offset) {
 
         this.driveMotor = driveMotor;
+        this.driveMotor.setIdleMode(IdleMode.kBrake);
         this.azimMotor = azimuthMotor;
-        azimController = azimMotor.getPIDController();
+        this.azimMotor.setIdleMode(IdleMode.kBrake);
+        //azimController = azimMotor.getPIDController();
         driveController = driveMotor.getPIDController();
         this.cancoder = cancoder;
-        azimMotor.getEncoder().setPositionConversionFactor(Math.PI * 2 / 13.3714);
 
-        azimMotor.getEncoder().setPosition(-cancoder.getPosition().getValue() * Math.PI * 2 + Math.PI / 2);
+        drive_Encoder = driveMotor.getEncoder();
+
+        // set offset to encoder
+        MagnetSensorConfigs conf = new MagnetSensorConfigs();
+
+        conf.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+        conf.MagnetOffset = offset;
+        conf.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        cancoder.getConfigurator().apply(conf);
+
+        anglePIDcontroller.enableContinuousInput(-180, 180);
+
+        //azimMotor.getEncoder().setPositionConversionFactor(Math.PI * 2 / 13.3714);
+
+        //azimMotor.getEncoder().setPosition(-cancoder.getPosition().getValue() * Math.PI * 2 + Math.PI / 2);
         azimMotor.setInverted(false);
-        azimController.setP(1);
-        encoder = azimuthMotor.getEncoder();
+        //azimController.setP(0.4);
+        //encoder = azimuthMotor.getEncoder();
         swerveCommand = new DirectSwerveCommand(0, 0);
         try {
-            azimMotor.setSmartCurrentLimit(40);
+            azimMotor.setSmartCurrentLimit(20);
             driveMotor.setSmartCurrentLimit(40);
             Thread.sleep(2000);
         } catch (Exception e) {
@@ -51,16 +85,46 @@ public class SwerveModule {
 
     }
 
+
+    void update() {
+
+        SwerveModuleState temp = new SwerveModuleState();
+
+        temp.speedMetersPerSecond = drive_Encoder.getVelocity();
+
+        temp.angle = Rotation2d.fromRotations( cancoder.getAbsolutePosition().getValueAsDouble() );
+
+        currentState = temp;
+    }
+
+
+
+    int counter = 0;
+
     public void acceptMotion(SwerveModuleState state) {
-        double theta = state.angle.getRadians();
+        //double theta = state.angle.getRadians();
+
+        update();
+
+        state = SwerveModuleState.optimize(state, currentState.angle);
+
         double driveVoltage = state.speedMetersPerSecond / maxSpeed;
-        calculateOptimalSetpoint(theta, driveVoltage, encoder.getPosition());
-        setReferenceAngle(swerveCommand.angle);
-        driveMotor.setVoltage(swerveCommand.drive * 60);
+        //calculateOptimalSetpoint(theta, driveVoltage, cancoder.getAbsolutePosition().getValueAsDouble());
+        var PIDval = anglePIDcontroller.calculate(cancoder.getAbsolutePosition().getValueAsDouble()*360, state.angle.getDegrees());
+        azimMotor.set(-MathUtil.clamp(PIDval, -0.5, 0.5));
+        //setReferenceAngle(swerveCommand.angle);
+        driveMotor.setVoltage(driveVoltage * 60 /*swerveCommand.drive * 60 */);
+        if( counter > 25 && log) {
+          System.out.println("target: " + state.angle.getDegrees() + " actual: " + cancoder.getAbsolutePosition().getValueAsDouble()*360 + " state: " + state.angle.getRadians() + " PIDvalue: " + PIDval);
+          counter = 0;
+        }
+        counter++;
     }
 
     public void setReferenceAngle(double referenceAngleRadians) {
-        double currentAngleRadians = encoder.getPosition();
+        //double currentAngleRadians = encoder.getPosition();
+        double currentAngleRadians = cancoder.getPosition().getValueAsDouble();
+
 
         double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
         if (currentAngleRadiansMod < 0.0) {
@@ -76,7 +140,7 @@ public class SwerveModule {
             adjustedReferenceAngleRadians += 2.0 * Math.PI;
         }
 
-        azimController.setReference(adjustedReferenceAngleRadians, CANSparkMax.ControlType.kPosition);
+        //azimController.setReference(adjustedReferenceAngleRadians, CANSparkMax.ControlType.kPosition);
     }
 
     private void calculateOptimalSetpoint(double steerAngle, double driveVoltage, double currentAngle) {

@@ -47,9 +47,12 @@ public class RobotContainer {
   private void configureBindings() {
     Trigger shootAmp = new JoystickButton(oi.gunnerController, 6);
     Trigger shootSpeaker = new JoystickButton(oi.gunnerController, 5);
-    Trigger speakerPos = new JoystickButton(oi.gunnerController, 4);
+    Trigger climb = new JoystickButton(oi.gunnerController, 4);
     Trigger ampPos = new JoystickButton(oi.gunnerController, 3);
     Trigger intake2 = new JoystickButton(oi.driveController, XboxController.Button.kRightBumper.value);
+
+    Trigger gyroReset = new JoystickButton(oi.driveController, XboxController.Button.kLeftBumper.value);
+
 
     intake2.onTrue(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
@@ -74,7 +77,7 @@ public class RobotContainer {
           intake.accept(0);
         }, shooter, intake),
 
-        new ArmGoToCommand(arm, 10),
+        new ArmGoToCommand(arm, 14),
         new WaitCommand(2),
         new InstantCommand(() -> {
           intake.accept(-12);
@@ -107,7 +110,9 @@ public class RobotContainer {
     }, shooter, intake), new ArmGoToCommand(arm, 3)));
 
     ampPos.onTrue(new ArmGoToCommand(arm, 90));
-    speakerPos.onTrue(new ArmGoToCommand(arm, 40));
+    climb.onTrue(new ArmGoToCommand(arm, 10));
+
+    gyroReset.onTrue( new InstantCommand( () -> { swerveDrive.resetGyro(); }));
 
   }
 

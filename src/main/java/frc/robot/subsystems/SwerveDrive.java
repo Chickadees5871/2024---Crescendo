@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveDrive extends SubsystemBase {
@@ -24,20 +25,20 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDrive() {
         modules = new SwerveModule[4];
         modules[0] = new SwerveModule(
-                new CANSparkMax(2, MotorType.kBrushless),
-                new CANSparkMax(1, MotorType.kBrushless), new CANcoder(50));
+                new CANSparkMax(8, MotorType.kBrushless),
+                new CANSparkMax(7, MotorType.kBrushless), new CANcoder(53), -0.154297);
         modules[1] = new SwerveModule(
-                new CANSparkMax(4, MotorType.kBrushless),
-                new CANSparkMax(3, MotorType.kBrushless), new CANcoder(51));
+                new CANSparkMax(2, MotorType.kBrushless),
+                new CANSparkMax(1, MotorType.kBrushless), new CANcoder(50),0.409424);
         modules[2] = new SwerveModule(
                 new CANSparkMax(6, MotorType.kBrushless),
-                new CANSparkMax(5, MotorType.kBrushless), new CANcoder(52));
+                new CANSparkMax(5, MotorType.kBrushless), new CANcoder(52),0.124756);
         modules[3] = new SwerveModule(
-                new CANSparkMax(8, MotorType.kBrushless),
-                new CANSparkMax(7, MotorType.kBrushless), new CANcoder(53));
+                new CANSparkMax(4, MotorType.kBrushless),
+                new CANSparkMax(3, MotorType.kBrushless), new CANcoder(51),0.010498, false);
         kinematics = new SwerveDriveKinematics(
-                new Translation2d(15 * 2.54 / 100, -15 * 2.54 / 100),
                 new Translation2d(15 * 2.54 / 100, 15 * 2.54 / 100),
+                new Translation2d(15 * 2.54 / 100, -15 * 2.54 / 100),
                 new Translation2d(-15 * 2.54 / 100, 15 * 2.54 / 100),
                 new Translation2d(-15 * 2.54 / 100, -15 * 2.54 / 100));
         navX = new AHRS(Port.kUSB);
@@ -45,8 +46,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void accept(ChassisSpeeds fieldCentricChassisSpeeds) {
-        var chassis = ChassisSpeeds.fromFieldRelativeSpeeds(fieldCentricChassisSpeeds, Rotation2d.fromDegrees(navX.getYaw() +180));
-        double gyro = navX.getYaw();
+        var chassis = ChassisSpeeds.fromFieldRelativeSpeeds(fieldCentricChassisSpeeds, Rotation2d.fromDegrees(-navX.getYaw() +180));
+        double gyro = -navX.getYaw();
         
         if(chassis.vxMetersPerSecond != 0 && chassis.vyMetersPerSecond != 0 && chassis.omegaRadiansPerSecond == 0){
                 chassis.omegaRadiansPerSecond = -controller.calculate(gyro, setpoint);
@@ -58,5 +59,13 @@ public class SwerveDrive extends SubsystemBase {
        for (int i = 0; i < 4; i++) {
         modules[i].acceptMotion(states[i]);
        }
+
+       //SmartDashboard.putNumberArray("swerve_target", fieldCentricChassisSpeeds);
+
+    }
+
+    public void resetGyro() {
+
+        navX.reset();
     }
 }
