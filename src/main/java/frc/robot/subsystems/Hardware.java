@@ -24,6 +24,7 @@ public class Hardware {
         private static ArmHardware instance;
         private SparkPIDController leadController;
 
+
         public static synchronized ArmHardware getInstance() {
             if (instance == null) {
                 instance = new ArmHardware();
@@ -40,15 +41,27 @@ public class Hardware {
             encoder.setPosition(0);
 
          encoder.setPositionConversionFactor(90 / (76.8)); // must be filled empirically
-            leader.setIdleMode(IdleMode.kBrake);
-            follower.setIdleMode(IdleMode.kBrake);
+           
+            leader.setIdleMode(IdleMode.kCoast);
+            follower.setIdleMode(IdleMode.kCoast);
             // follower.setInverted(true);
             follower.follow(leader, true);
             // needs to be tuned empirically
             pidController = new ProfiledPIDController(.05, 0, 0,
-                    new Constraints(60, 1000));
-
+                    new Constraints(80, 1000));
+            leadController =  leader.getPIDController();
             standardController = new PIDController(.05, 0, 0);
+            leadController.setP(.015);
+            // leadController.setD(.03);
+            // try { 
+            //     Thread.sleep(10*1000);
+            // } catch (Exception e) {
+            //     // TODO: handle exception
+            // }
+            // leader.setIdleMode(IdleMode.kBrake);
+            // follower.setIdleMode(IdleMode.kBrake);
+        // leadController.setReference(90, ControlType.kPosition);
+
         }
 
         private static double calculateFF(double theta) {
@@ -59,10 +72,18 @@ public class Hardware {
             return encoder;
         }
 
+        public void setBrake(){
+            leader.setIdleMode(IdleMode.kBrake);
+            follower.setIdleMode(IdleMode.kBrake);
+        }
         // Takes in target angle, and drives towards target angle;
         public void execute(double position) {
-            var output = pidController.calculate(encoder.getPosition(), position);
-            leader.set(output);
+            // var output = pidController.calculate(encoder.getPosition(), position);
+            // leader.set(output);
+            leadController.setReference(position, ControlType.kPosition);
+            // if(Math.random() > .9){
+            //     System.out.println(position);
+            // }
         }
     }
 

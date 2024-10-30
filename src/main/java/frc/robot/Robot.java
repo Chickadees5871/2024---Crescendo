@@ -43,11 +43,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = robotContainer.getAutonomousCommand();
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    //if (m_autonomousCommand != null) {
+    //  m_autonomousCommand.schedule();
+    //}
+
+    robotContainer.arm.setBrake();
   }
 
   @Override
@@ -65,8 +67,7 @@ public class Robot extends TimedRobot {
     }
     robotContainer.driveCommand.schedule();
 
-    new ArmGoToCommand(robotContainer.arm, 3).schedule();
-    System.out.println("Here");
+    robotContainer.arm.setBrake();
 
   }
 

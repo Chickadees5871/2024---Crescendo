@@ -8,12 +8,16 @@ public class Arm extends SubsystemBase{
     private final double ANGLE_MAX = 180;
     private final double ANGLE_MIN = 0;
     private static Arm instance;
-    private double angle;
+    private double angle = 90;
     
     private Arm(){
         hardware = Hardware.ArmHardware.getInstance();
     }
 
+    public void setBrake(){
+        hardware.setBrake();
+    }
+    
     public static Arm getInstance(){
         if(instance == null){
             instance = new Arm();
@@ -23,6 +27,7 @@ public class Arm extends SubsystemBase{
 
     public void accept(double angle){
         this.angle = angle;
+        // throw new RuntimeException("potato");
     }
 
     @Override

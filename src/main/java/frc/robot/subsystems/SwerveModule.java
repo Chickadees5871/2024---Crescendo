@@ -40,7 +40,7 @@ public class SwerveModule {
             this.angle = angle;
             this.drive = drive;
 
-            driveMotor.setIdleMode(IdleMode.kCoast);
+           // driveMotor.setIdleMode(IdleMode.kCoast);
         }
     }
 public SwerveModule(CANSparkMax driveMotor, CANSparkMax azimuthMotor, CANcoder cancoder, double offset, boolean log) {

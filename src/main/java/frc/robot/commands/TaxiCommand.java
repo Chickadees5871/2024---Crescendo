@@ -16,7 +16,7 @@ public class TaxiCommand extends Command {
 
     @Override
     public void initialize() {
-        swerveDrive.accept(new ChassisSpeeds(0, .1, 0));
+        swerveDrive.accept(new ChassisSpeeds(0, -.1, 0));
         timestamp = Timer.getFPGATimestamp();
 
     }
