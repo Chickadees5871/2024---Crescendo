@@ -33,42 +33,57 @@ public class RobotContainer {
   public final Intake intake;
 
   public RobotContainer() {
-
+    // Initialize the subsystems
     swerveDrive = new SwerveDrive();
     oi = new OperatorInterface();
     driveCommand = new DriveCommand(oi, swerveDrive);
     arm = Arm.getInstance();
     shooter = Shooter.getInstance();
     intake = Intake.getInstance();
+
+    // Sets Keybinds
     configureBindings();
     System.out.println(ShooterHardware.getInstance());
   }
 
   private void configureBindings() {
+    // TODO: what are these bindings
+
+    // Shooter Things ?
     Trigger shootAmp = new JoystickButton(oi.gunnerController, 5);
     Trigger shootSpeaker = new JoystickButton(oi.gunnerController, 6);
+
+    // NOTE: Speaker and Amp is a game piece
+
+    // I'm assuming this sets the pos of the arm to the joystick location.
     Trigger speakerPos = new JoystickButton(oi.gunnerController, 4);
+    
+    // No clue what these are
     Trigger carry = new JoystickButton(oi.gunnerController, 12);
     Trigger ampPos = new JoystickButton(oi.gunnerController, 3);
     Trigger intake2 = new JoystickButton(oi.driveController, XboxController.Button.kRightBumper.value);
-
     Trigger gyroReset = new JoystickButton(oi.driveController, XboxController.Button.kLeftBumper.value);
 
-
-    carry.onTrue(new ArmGoToCommand(arm, 40));
+    // If this button is pressed/toggled set the arm to 40 Degrees, else set the arm angle to 4 Degrees
+    carry.onTrue(new ArmGoToCommand(arm, 40)); 
     carry.onFalse(new ArmGoToCommand(arm, 4));
 
+    // If the intake kebind is pressed/toggled the arm is set to 4 Degrees and the shooter accept motor stops and the intake motor starts going inwards
     intake2.onTrue(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(-10);
 
     }), new ArmGoToCommand(arm,4)));
 
+    // If the intake aint pressed/toggled the arm still goes down and the shooter still stops and the intake stops too
     intake2.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
     }, shooter, intake), new ArmGoToCommand(arm, 4)));
 
+    // If the shoot speaker button is pressed/toggled the shooter motor still stops and the intake goes outwards
+    // Then waits 100ms then the shooter motor goes outwards and the intake stops. 
+    // the the arm goes to 13 Deg the we wait 2 seconds then the intake motor goes inwards 
     shootSpeaker.onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> {
           shooter.accept(0);
@@ -88,7 +103,9 @@ public class RobotContainer {
           System.out.println("Intake here");
         }, intake)));
         
-
+        // If the shoot amp button pressed/toggled then shooter motor stops and intake goes out then wait 100ms
+        // Then the shooter goes out the the arm goes to 90 Deg the wait 300 ms
+        // Then intake goes out
     shootAmp.onTrue(new SequentialCommandGroup(
       new InstantCommand(() -> {
           shooter.accept(0);
@@ -105,23 +122,28 @@ public class RobotContainer {
           intake.accept(-12);
         }, intake)));
 
+        // When not shooting stop the intake and the shooter motors then move armto 4 Deg
     shootSpeaker.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
     }, shooter, intake), new ArmGoToCommand(arm, 4)));
-
+    
     shootAmp.onFalse(new ParallelCommandGroup(new InstantCommand(() -> {
       shooter.accept(0);
       intake.accept(0);
     }, shooter, intake), new ArmGoToCommand(arm, 4)));
 
+    // When amp pos pressed go to 90 Deg
     ampPos.onTrue(new ArmGoToCommand(arm, 90));
+    // When speaker pos pressed arm goes to 12 Deg
     speakerPos.onTrue(new ArmGoToCommand(arm, 12));
 
+    // When gyroreset pressed reset the swerve drive gyros
     gyroReset.onTrue( new InstantCommand( () -> { swerveDrive.resetGyro(); }));
 
   }  
 
+  // Auto Code
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
       new InstantCommand(() -> {

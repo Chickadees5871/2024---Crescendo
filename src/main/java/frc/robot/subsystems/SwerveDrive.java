@@ -65,7 +65,6 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void resetGyro() {
-
         navX.reset();
     }
 }
